@@ -45,7 +45,11 @@ RUN apt-get update && \
         sqlite3 \
         supervisor && \
         sudo easy_install -U pip && \
-        pip install uwsgi
+        pip install uwsgi && \
+        apt-get -y clean && \
+        apt-get -y autoclean && \
+        apt-get -y autoremove && \
+        rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 # Need symlink for bower to work with node
 RUN npm install -g bower grunt-cli && ln -s /usr/bin/nodejs /usr/bin/node
@@ -63,7 +67,6 @@ RUN pip install -r /home/docker/dev_requirements.txt
 
 # Clean up packages required for build
 RUN apt-get purge -y \
-    man \
     vim-common \
     vim-tiny \
     libpython3.4-stdlib:amd64 \
@@ -71,11 +74,6 @@ RUN apt-get purge -y \
     eject \
     locales \
     software-properties-common \
-    python-pip \
     python3
 
-# clean packages
-RUN apt-get -y clean && \
-    apt-get -y autoclean && \
-    apt-get -y autoremove && \
-    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+
